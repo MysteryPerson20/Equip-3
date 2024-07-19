@@ -2,14 +2,14 @@ local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
 
-local function selectThirdTool()
-    -- Ensure the Backpack has at least 3 tools
-    if #backpack:GetChildren() < 3 then
+local function selectFourthTool()
+    -- Ensure the Backpack has at least 4 tools
+    if #backpack:GetChildren() < 4 then
         warn("Not enough tools in Backpack.")
         return
     end
 
-    -- Get the third tool from the Backpack
+    -- Get the fourth tool from the Backpack
     local tools = {}
     for _, item in ipairs(backpack:GetChildren()) do
         if item:IsA("Tool") then
@@ -17,20 +17,20 @@ local function selectThirdTool()
         end
     end
 
-    if #tools < 3 then
-        warn("Less than 3 tools found in Backpack.")
+    if #tools < 4 then
+        warn("Less than 4 tools found in Backpack.")
         return
     end
 
-    local thirdTool = tools[3]
+    local fourthTool = tools[4]
 
-    -- Equip the third tool
-    if thirdTool then
-        thirdTool.Parent = player.Character
+    -- Equip the fourth tool
+    if fourthTool then
+        fourthTool.Parent = player.Character
         -- Optionally, ensure the tool is equipped by the player's character
-        player.Character:FindFirstChildOfClass("Humanoid").EquipTool(thirdTool)
+        player.Character:FindFirstChildOfClass("Humanoid").EquipTool(fourthTool)
     else
-        warn("Third tool not found.")
+        warn("Fourth tool not found.")
     end
 end
 
@@ -38,10 +38,10 @@ end
 player.CharacterAdded:Connect(function()
     -- Wait a short moment for the character to be fully loaded
     wait(1)
-    selectThirdTool()
+    selectFourthTool()
 end)
 
--- Optionally, call selectThirdTool immediately if the character is already loaded
+-- Optionally, call selectFourthTool immediately if the character is already loaded
 if player.Character then
-    selectThirdTool()
+    selectFourthTool()
 end

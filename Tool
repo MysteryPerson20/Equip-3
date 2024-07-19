@@ -1,0 +1,47 @@
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+
+local function selectThirdTool()
+    -- Ensure the Backpack has at least 3 tools
+    if #backpack:GetChildren() < 3 then
+        warn("Not enough tools in Backpack.")
+        return
+    end
+
+    -- Get the third tool from the Backpack
+    local tools = {}
+    for _, item in ipairs(backpack:GetChildren()) do
+        if item:IsA("Tool") then
+            table.insert(tools, item)
+        end
+    end
+
+    if #tools < 3 then
+        warn("Less than 3 tools found in Backpack.")
+        return
+    end
+
+    local thirdTool = tools[3]
+
+    -- Equip the third tool
+    if thirdTool then
+        thirdTool.Parent = player.Character
+        -- Optionally, ensure the tool is equipped by the player's character
+        player.Character:FindFirstChildOfClass("Humanoid").EquipTool(thirdTool)
+    else
+        warn("Third tool not found.")
+    end
+end
+
+-- Connect to the CharacterAdded event to ensure the character is loaded
+player.CharacterAdded:Connect(function()
+    -- Wait a short moment for the character to be fully loaded
+    wait(1)
+    selectThirdTool()
+end)
+
+-- Optionally, call selectThirdTool immediately if the character is already loaded
+if player.Character then
+    selectThirdTool()
+end

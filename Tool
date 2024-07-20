@@ -1,47 +1,27 @@
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+-- Get the player's character and backpack
+local player = game.Players.LocalPlayer
 local backpack = player:WaitForChild("Backpack")
+local character = player.Character or player.CharacterAdded:Wait()
 
-local function selectFourthTool()
-    -- Ensure the Backpack has at least 4 tools
-    if #backpack:GetChildren() < 4 then
-        warn("Not enough tools in Backpack.")
-        return
-    end
+-- Wait for the tool named "Serious Punch" to be added to the backpack
+local tool = backpack:WaitForChild("Serious Punch")
 
-    -- Get the fourth tool from the Backpack
-    local tools = {}
-    for _, item in ipairs(backpack:GetChildren()) do
-        if item:IsA("Tool") then
-            table.insert(tools, item)
-        end
-    end
-
-    if #tools < 4 then
-        warn("Less than 4 tools found in Backpack.")
-        return
-    end
-
-    local fourthTool = tools[4]
-
-    -- Equip the fourth tool
-    if fourthTool then
-        fourthTool.Parent = player.Character
-        -- Optionally, ensure the tool is equipped by the player's character
-        player.Character:FindFirstChildOfClass("Humanoid").EquipTool(fourthTool)
+-- Function to activate the tool
+local function activateTool(tool)
+    if tool:IsA("Tool") then
+        -- Move the tool to the character's hand
+        tool.Parent = character
+        
+        -- Activate the tool
+        tool:Activate()
+        
+        -- Optionally, you can move the tool back to the backpack after a short delay
+        wait(1)  -- Adjust the delay as needed
+        tool.Parent = backpack
     else
-        warn("Fourth tool not found.")
+        warn("The item is not a tool.")
     end
 end
 
--- Connect to the CharacterAdded event to ensure the character is loaded
-player.CharacterAdded:Connect(function()
-    -- Wait a short moment for the character to be fully loaded
-    wait(1)
-    selectFourthTool()
-end)
-
--- Optionally, call selectFourthTool immediately if the character is already loaded
-if player.Character then
-    selectFourthTool()
-end
+-- Activate the tool
+activateTool(tool)
